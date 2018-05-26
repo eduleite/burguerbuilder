@@ -39,7 +39,7 @@ class BurguerBuilder extends Component {
 
     purchaseHandler = () => {
         this.setState({purchasing: true});
-    }
+    };
 
     updatePurchaseState(ingredients) {
         const sum = Object.keys(ingredients)
@@ -85,29 +85,41 @@ class BurguerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.totalPrice,
-            customer: {
-                name: 'Eduardo',
-                address: {
-                    street: 'Rua Itua',
-                    zipcode: '21940180',
-                    country: 'Brasil'
-                },
-                email: 'edu.leite@gmail.com'
-            },
-            deliveryMethod: 'fastest'
-        };
-        this.setState({loading: true});
-        axios.post('/orders.json', order)
-            .then(response => {
-                this.setState({loading: false, purchasing: false});
-            })
-            .catch(error => {
-                this.setState({loading: false, purchasing: false});
-            });
-    }
+        const queryParams = [];
+        for(let i in this.state.ingredients) {
+            queryParams.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+        }
+        const queryString = queryParams.join('&');
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
+        });
+    };
+
+    // purchaseContinueHandler = () => {
+    //     const order = {
+    //         ingredients: this.state.ingredients,
+    //         price: this.state.totalPrice,
+    //         customer: {
+    //             name: 'Eduardo',
+    //             address: {
+    //                 street: 'Rua Itua',
+    //                 zipcode: '21940180',
+    //                 country: 'Brasil'
+    //             },
+    //             email: 'edu.leite@gmail.com'
+    //         },
+    //         deliveryMethod: 'fastest'
+    //     };
+    //     this.setState({loading: true});
+    //     axios.post('/orders.json', order)
+    //         .then(response => {
+    //             this.setState({loading: false, purchasing: false});
+    //         })
+    //         .catch(error => {
+    //             this.setState({loading: false, purchasing: false});
+    //         });
+    // };
 
     render() {
         const disabledInfo = {
