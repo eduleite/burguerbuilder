@@ -13,7 +13,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeHolder: 'Your Name'
+                    placeholder: 'Your Name'
                 },
                 value: ''
             },
@@ -21,7 +21,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeHolder: 'Street'
+                    placeholder: 'Street'
                 },
                 value: ''
             },
@@ -29,7 +29,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeHolder: 'ZIP Code'
+                    placeholder: 'ZIP Code'
                 },
                 value: ''
             },
@@ -37,7 +37,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'text',
-                    placeHolder: 'Country'
+                    placeholder: 'Country'
                 },
                 value: ''
             },
@@ -45,7 +45,7 @@ class ContactData extends Component {
                 elementType: 'input',
                 elementConfig: {
                     type: 'email',
-                    placeHolder: 'Your Email'
+                    placeholder: 'Your Email'
                 },
                 value: ''
             },
@@ -57,7 +57,7 @@ class ContactData extends Component {
                         {value: 'cheapest', displayValue: 'Cheapest'}
                     ],
                     type: 'text',
-                    placeHolder: 'Your Name'
+                    placeholder: 'Your Name'
                 },
                 value: ''
             }
@@ -67,10 +67,14 @@ class ContactData extends Component {
 
     orderHandler = (event) => {
         event.preventDefault();
+        const formData = {};
+        for(let formElementIdentifier in this.state.orderForm) {
+            formData[formElementIdentifier] = this.state.orderForm[formElementIdentifier].value;
+        }
         const order = {
             ingredients: this.props.ingredients,
             price: this.props.price,
-
+            order: formData
         };
         this.setState({loading: true});
         axios.post('/orders.json', order)
@@ -84,14 +88,33 @@ class ContactData extends Component {
 
     };
 
+    inputChangedHandler = (event, inputIdentifier) => {
+        const updatedOrderForm = {...this.state.orderForm};
+        const updatedFormElement = {...updatedOrderForm[inputIdentifier]};
+        updatedFormElement.value = event.target.value;
+        updatedOrderForm[inputIdentifier] = updatedFormElement;
+        this.setState({orderForm: updatedOrderForm});
+    };
+
     render() {
+        const formElementsArray = [];
+        for(let key in this.state.orderForm) {
+            formElementsArray.push({
+                id: key,
+                config: this.state.orderForm[key],
+            });
+        }
+
+
         let form = (
-            <form>
-                <Input inputType="input" type="text" name="name" placeholder="Your Name"/>
-                <Input inputType="input" type="email" name="email" placeholder="Type your email"/>
-                <Input inputType="input" type="text" name="street" placeholder="Type your street name"/>
-                <Input inputType="input" type="text" name="postal" placeholder="Type your postal code"/>
-                <Button btnType="Success" clicked={this.orderHandler}>ORDER</Button>
+            <form onSubmit={this.orderHandler}>
+                {formElementsArray.map(formElement => (
+                    <Input key={formElement.id} elementType={formElement.config.elementType}
+                           elementConfig={formElement.config.elementConfig} value={formElement.config.value}
+                           changed={(event) => this.inputChangedHandler(event, formElement.id)}
+                    />
+                ))}
+                <Button btnType="Success">ORDER</Button>
             </form>
         );
         if (this.state.loading) {
