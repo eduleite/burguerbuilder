@@ -15,19 +15,11 @@ class BurguerBuilder extends Component {
 
     state = {
         purchasable: false,
-        purchasing: false,
-        loading: false,
-        error: false,
+        purchasing: false
     };
 
     componentDidMount() {
-        // axios.get('/ingredients.json')
-        //     .then(response => {
-        //         this.setState({ingredients: response.data});
-        //     })
-        //     .catch(error => {
-        //         this.setState({error: true});
-        //     });
+        this.props.onInitIngredients();
     }
 
     purchaseHandler = () => {
@@ -61,7 +53,7 @@ class BurguerBuilder extends Component {
             disabledInfo[key] = disabledInfo[key] <= 0;
         }
         let orderSummary = null;
-        let burguer = this.state.error ? <p>Ingredients can't be loaded</p> : <Spinner/>;
+        let burguer = this.props.error ? <p>Ingredients can't be loaded</p> : <Spinner/>;
         if (this.props.ings) {
             burguer = (
                 <Aux>
@@ -80,9 +72,6 @@ class BurguerBuilder extends Component {
                 purchaseCanceled={this.purchaseCancelHandler}
                 purchaseContinued={this.purchaseContinueHandler}
                 price={this.props.totalPrice}/>;
-            if (this.state.loading) {
-                orderSummary = <Spinner/>;
-            }
         }
         return (
             <Aux>
@@ -99,14 +88,16 @@ class BurguerBuilder extends Component {
 const mapStateToProps = state => {
     return {
         ings: state.ingredients,
-        totalPrice: state.totalPrice
+        totalPrice: state.totalPrice,
+        error: state.error
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         onIngredientAdded: (ingredientName) => dispatch(burguerBuilderActions.addIngredient(ingredientName)),
-        onIngredientRemoved: (ingredientName) => dispatch(burguerBuilderActions.removeIngredient(ingredientName))
+        onIngredientRemoved: (ingredientName) => dispatch(burguerBuilderActions.removeIngredient(ingredientName)),
+        onInitIngredients: () => dispatch(burguerBuilderActions.fetchIngredients())
     };
 };
 
