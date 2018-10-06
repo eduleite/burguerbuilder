@@ -7,7 +7,7 @@ const initialState = {
     purchased: false
 };
 
-const reducer = (state = initialState, action) => {
+function reducer(state = initialState, action) {
     switch (action.type) {
         case actionTypes.PURCHASE_INIT: return purchaseInit(state, action);
         case actionTypes.PURCHASE_BURGUER_START: return purchaseBurguerStart(state, action);
@@ -18,7 +18,7 @@ const reducer = (state = initialState, action) => {
         case actionTypes.FETCH_ORDERS_FAILED: return fetchOrdersFailed(state, action);
         default: return state;
     }
-};
+}
 
 function purchaseInit(state, action) {
     return updateObject(state, {purchased: false});
