@@ -9,7 +9,7 @@ import OrderSummary from '../../components/Burguer/OrderSummary/OrderSummary';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
-import * as burguerBuilderActions from '../../store/actions/index';
+import * as actions from '../../store/actions/index';
 
 class BurguerBuilder extends Component {
 
@@ -42,6 +42,7 @@ class BurguerBuilder extends Component {
     };
 
     purchaseContinueHandler = () => {
+        this.props.onInitPurchase();
         this.props.history.push('/checkout');
     };
 
@@ -87,17 +88,18 @@ class BurguerBuilder extends Component {
 
 const mapStateToProps = state => {
     return {
-        ings: state.ingredients,
-        totalPrice: state.totalPrice,
-        error: state.error
+        ings: state.burguerBuilder.ingredients,
+        totalPrice: state.burguerBuilder.totalPrice,
+        error: state.burguerBuilder.error
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        onIngredientAdded: (ingredientName) => dispatch(burguerBuilderActions.addIngredient(ingredientName)),
-        onIngredientRemoved: (ingredientName) => dispatch(burguerBuilderActions.removeIngredient(ingredientName)),
-        onInitIngredients: () => dispatch(burguerBuilderActions.fetchIngredients())
+        onIngredientAdded: (ingredientName) => dispatch(actions.addIngredient(ingredientName)),
+        onIngredientRemoved: (ingredientName) => dispatch(actions.removeIngredient(ingredientName)),
+        onInitIngredients: () => dispatch(actions.fetchIngredients()),
+        onInitPurchase: () => dispatch(actions.purchaseInit())
     };
 };
 

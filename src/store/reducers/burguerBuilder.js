@@ -1,4 +1,5 @@
 import * as actionTypes from '../actions/actionTypes';
+import { updateObject } from "../utility";
 
 const INGREDIENT_PRICES = {
     salad: 0.5,
@@ -24,45 +25,45 @@ const reducer = (state = initialState, action) => {
 };
 
 function addIngredient(state, action) {
-    return {
-        ...state,
-        ingredients: {
-            ...state.ingredients,
-            [action.ingredientName]: state.ingredients[action.ingredientName] + 1
-        },
+    const updatedIngredient = {
+        [action.ingredientName]: state.ingredients[action.ingredientName] + 1
+    };
+    const updatedIngredients = updateObject(state.ingredients, updatedIngredient);
+    const updatedState = {
+        ingredients: updatedIngredients,
         totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
     };
+    return updateObject(state, updatedState);
 }
 
 function removeIngredient(state, action) {
-    return {
-        ...state,
-        ingredients: {
-            ...state.ingredients,
-            [action.ingredientName]: state.ingredients[action.ingredientName] - 1
-        },
-        totalPrice: state.totalPrice - INGREDIENT_PRICES[action.ingredientName]
+    const updatedIngredient = {
+        [action.ingredientName]: state.ingredients[action.ingredientName] - 1
     };
+    const updatedIngredients = updateObject(state.ingredients, updatedIngredient);
+    const updatedState = {
+        ingredients: updatedIngredients,
+        totalPrice: state.totalPrice + INGREDIENT_PRICES[action.ingredientName]
+    };
+    return updateObject(state, updatedState);
 }
 
 function setIngredients(state, action) {
-    return {
-        ...state,
+    const updatedState = {
         ingredients: {
             salad: action.ingredients.salad,
             bacon: action.ingredients.bacon,
             cheese: action.ingredients.cheese,
             meat: action.ingredients.meat
         },
+        totalPrice: 4,
         error: false
     };
+    return updateObject(state, updatedState);
 }
 
 function fetchIngredientsFailed(state, action) {
-    return {
-        ...state,
-        error: true
-    };
+    return updateObject(state, {error: true});
 }
 
 export default reducer;
