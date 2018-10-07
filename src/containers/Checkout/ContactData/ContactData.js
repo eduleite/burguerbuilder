@@ -97,19 +97,19 @@ class ContactData extends Component {
         formIsValid: false
     };
 
-    checkValidity(value, rules) {
-        let isValid = true;
-        if (rules.required) {
-            isValid = value.trim() !== '' && isValid;
+        checkValidity(value, rules) {
+            let isValid = true;
+            if (rules.required) {
+                isValid = value.trim() !== '' && isValid;
+            }
+            if (rules.minLength) {
+                isValid = value.length >= rules.minLength && isValid;
+            }
+            if (rules.maxLength) {
+                isValid = value.length <= rules.maxLength && isValid;
+            }
+            return isValid;
         }
-        if (rules.minLength) {
-            isValid = value.length >= rules.minLength && isValid;
-        }
-        if (rules.maxLength) {
-            isValid = value.length <= rules.maxLength && isValid;
-        }
-        return isValid;
-    }
 
     orderHandler = (event) => {
         event.preventDefault();

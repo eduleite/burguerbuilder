@@ -22,10 +22,11 @@ export const purchaseBurguerStart = () => {
     };
 };
 
+//Testando metodo diferente de pegar o token, acessando o getState diretamente
 export const purchaseBurguer = orderData => {
-    return dispatch => {
+    return (dispatch, getState) => {
         dispatch(purchaseBurguerStart());
-        axios.post('/orders.json', orderData)
+        axios.post('/orders.json?auth=' + getState().auth.token, orderData)
             .then(response => {
                 dispatch(purchaseBurguerSucess(response.data.name, orderData));
             })
@@ -61,10 +62,10 @@ export const fetchOrdersStart = () => {
     };
 };
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrdersStart());
-        axios.get('/orders.json')
+        axios.get('/orders.json?auth=' + token)
             .then(response => {
                 const orders = [];
                 for (let key in response.data) {
