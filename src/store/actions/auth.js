@@ -45,9 +45,9 @@ export const auth = (email, password, isSignup) => {
             password: password,
             returnSecureToken: true
         };
-        let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyCizyUmv-3AmkCrs34CXAJX3LMqI0P6L60';
+        let url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/signupNewUser?key=AIzaSyDe8wgAM84sOkBpiu2QqV2_TRpfvOD2PcQ';
         if (!isSignup) {
-            url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyCizyUmv-3AmkCrs34CXAJX3LMqI0P6L60';
+            url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDe8wgAM84sOkBpiu2QqV2_TRpfvOD2PcQ';
         }
         axios.post(url, authData)
             .then(response => {
@@ -59,5 +59,12 @@ export const auth = (email, password, isSignup) => {
                 console.log(error);
                 dispatch(authFailed(error.response.data.error));
             });
+    };
+};
+
+export const setAuthRedirectPath = (path) => {
+    return {
+        type: actionTypes.SET_AUTH_REDIRECT_PATH,
+        path: path
     };
 };
