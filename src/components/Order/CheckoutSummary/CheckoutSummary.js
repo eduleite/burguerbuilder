@@ -1,7 +1,7 @@
 import React from 'react';
 import Burguer from '../../Burguer/Burguer';
 import Button from '../../UI/Button/Button';
-import classes from './CheckoutSummary.css';
+import classes from './CheckoutSummary.module.css';
 
 /** @namespace props.checkoutCancelled */
 /** @namespace props.checkoutContinued */
