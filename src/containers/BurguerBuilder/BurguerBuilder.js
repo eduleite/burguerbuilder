@@ -11,7 +11,7 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler';
 import axios from '../../axios-orders';
 import * as actions from '../../store/actions/index';
 
-class BurguerBuilder extends Component {
+export class BurguerBuilder extends Component {
 
     state = {
         purchasable: false,

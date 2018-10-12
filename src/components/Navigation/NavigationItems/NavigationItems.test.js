@@ -9,6 +9,7 @@ configure({adapter: new Adapter()});
 describe("<NavigationItems />", () => {
 
     let wrapper;
+
     beforeEach(() => {
         wrapper = shallow(<NavigationItems/>);
     });
@@ -22,4 +23,8 @@ describe("<NavigationItems />", () => {
         expect(wrapper.find(NavigationItem)).toHaveLength(3);
     });
 
+    it('should render a logout link', () => {
+        wrapper.setProps({isAuthenticated: true});
+        expect(wrapper.contains(<NavigationItem link="/logout">Logout</NavigationItem>)).toEqual(true);
+    });
 });
