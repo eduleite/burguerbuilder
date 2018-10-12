@@ -15,23 +15,26 @@ describe('auth reducer', () => {
     });
 
     it('should store the token uppon login', () => {
-        expect(reducer({
+        const fromState = {
             token: null,
             userId: null,
             error: null,
             loading: false,
             authRedirectPath: '/'
-        }, {
+        };
+        const action = {
             type: actionTypes.AUTH_SUCCESS,
             idToken: 'some-token',
             userId: 'some-userid'
-        })).toEqual({
+        };
+        const expected = {
             token: 'some-token',
             userId: 'some-userid',
             error: null,
             loading: false,
             authRedirectPath: '/'
-        });
+        };
+        expect(reducer(fromState, action)).toEqual(expected);
     })
 
 });
