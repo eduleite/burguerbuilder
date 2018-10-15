@@ -6,11 +6,13 @@ const asyncComponent = (importComponent) => {
             component: null,
         };
 
+        async loadComponent() {
+            const cmp = await importComponent();
+            this.setState({component: cmp.default});
+        }
+
         componentDidMount() {
-            importComponent().
-            then(cmp => {
-                this.setState({component: cmp.default})
-            });
+            this.loadComponent().then();
         }
 
         render() {

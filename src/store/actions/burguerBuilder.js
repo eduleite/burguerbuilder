@@ -16,14 +16,13 @@ export const removeIngredient = (ingredientName) => {
 };
 
 export const fetchIngredients = () => {
-    return dispatch => {
-        axios.get('/ingredients.json')
-            .then(response => {
-                dispatch(setIngrediens(response.data));
-            })
-            .catch(error => {
-                dispatch(fetchIngredientsFailed());
-            });
+    return async dispatch => {
+        try {
+            const response = await axios.get('/ingredients.json');
+            dispatch(setIngrediens(response.data));
+        } catch (error) {
+            dispatch(fetchIngredientsFailed());
+        }
     };
 };
 

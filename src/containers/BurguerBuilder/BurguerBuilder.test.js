@@ -25,5 +25,4 @@ describe('<BurguerBuilder/>', () => {
         expect(wrapper.find(BuildControls)).toHaveLength(1);
     });
 
-
 });

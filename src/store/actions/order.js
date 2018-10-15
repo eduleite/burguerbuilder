@@ -24,15 +24,14 @@ export const purchaseBurguerStart = () => {
 
 //Testando metodo diferente de pegar o token, acessando o getState diretamente
 export const purchaseBurguer = orderData => {
-    return (dispatch, getState) => {
+    return async (dispatch, getState) => {
         dispatch(purchaseBurguerStart());
-        axios.post('/orders.json?auth=' + getState().auth.token, orderData)
-            .then(response => {
-                dispatch(purchaseBurguerSucess(response.data.name, orderData));
-            })
-            .catch(error => {
-                dispatch(purchaseBurguerFailed(error));
-            });
+        try {
+            const response = await axios.post('/orders.json?auth=' + getState().auth.token, orderData);
+            dispatch(purchaseBurguerSucess(response.data.name, orderData));
+        } catch (error) {
+            dispatch(purchaseBurguerFailed(error));
+        }
     };
 };
 
@@ -63,22 +62,21 @@ export const fetchOrdersStart = () => {
 };
 
 export const fetchOrders = (token, userId) => {
-    return dispatch => {
+    return async dispatch => {
         dispatch(fetchOrdersStart());
         const queryParams = '?auth=' + token + '&orderBy="userId"&equalTo="' + userId + '"';
-        axios.get('/orders.json' + queryParams)
-            .then(response => {
-                const orders = [];
-                for (let key in response.data) {
-                    orders.push({
-                        ...response.data[key],
-                        id: key
-                    });
-                }
-                dispatch(fetchOrdersSuccess(orders));
-            })
-            .catch((error) => {
-                dispatch(fetchOrdersFail(error));
-            });
-    }
+        try {
+            const response = await axios.get('/orders.json' + queryParams);
+            const orders = [];
+            for (let key in response.data) {
+                orders.push({
+                    ...response.data[key],
+                    id: key
+                });
+            }
+            dispatch(fetchOrdersSuccess(orders));
+        } catch (error) {
+            dispatch(fetchOrdersFail(error));
+        }
+    };
 };

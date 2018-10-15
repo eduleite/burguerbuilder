@@ -41,7 +41,7 @@ export const checkAuthTimeout = (expirationTime) => {
 };
 
 export const auth = (email, password, isSignup) => {
-    return dispatch => {
+    return async dispatch => {
         dispatch(authStart());
         const authData = {
             email: email,
@@ -52,18 +52,18 @@ export const auth = (email, password, isSignup) => {
         if (!isSignup) {
             url = 'https://www.googleapis.com/identitytoolkit/v3/relyingparty/verifyPassword?key=AIzaSyDe8wgAM84sOkBpiu2QqV2_TRpfvOD2PcQ';
         }
-        axios.post(url, authData)
-            .then(response => {
-                const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
-                localStorage.setItem('token', response.data.idToken);
-                localStorage.setItem('expirationDate', expirationDate);
-                localStorage.setItem('userId', response.data.localId);
-                dispatch(authSucess(response.data.idToken, response.data.localId));
-                dispatch(checkAuthTimeout(response.data.expiresIn));
-            })
-            .catch(error => {
-                dispatch(authFailed(error.response.data.error));
-            });
+        try {
+            const response = await axios.post(url, authData);
+            const expirationDate = new Date(new Date().getTime() + response.data.expiresIn * 1000);
+            localStorage.setItem('token', response.data.idToken);
+            localStorage.setItem('expirationDate', expirationDate);
+            localStorage.setItem('userId', response.data.localId);
+            dispatch(authSucess(response.data.idToken, response.data.localId));
+            dispatch(checkAuthTimeout(response.data.expiresIn));
+
+        } catch (error) {
+            dispatch(authFailed(error.response.data.error));
+        }
     };
 };
 
