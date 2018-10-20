@@ -1,4 +1,6 @@
 export {
+    setIngrediens,
+    fetchIngredientsFailed,
     addIngredient,
     removeIngredient,
     fetchIngredients
@@ -6,12 +8,22 @@ export {
 
 export {
     purchaseBurguer,
+    purchaseBurguerStart,
+    purchaseBurguerSucess,
+    purchaseBurguerFailed,
     purchaseInit,
-    fetchOrders
+    fetchOrders,
+    fetchOrdersStart,
+    fetchOrdersFail,
+    fetchOrdersSuccess
 } from './order';
 
 export {
     auth,
+    authStart,
+    authSucess,
+    authFailed,
+    checkAuthTimeout,
     logout,
     logoutSucceed,
     setAuthRedirectPath,

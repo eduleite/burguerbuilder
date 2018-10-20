@@ -12,7 +12,7 @@ import { BrowserRouter } from 'react-router-dom';
 import burguerBuilderReducer from './store/reducers/burguerBuilder';
 import orderReducer from './store/reducers/order';
 import authReducer from './store/reducers/auth';
-import { watchAuth } from "./store/sagas";
+import {rootSaga} from "./store/sagas";
 
 const composeEnhancers = process.env.NODE_ENV === 'development' ? window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ : null || compose;
 
@@ -26,7 +26,7 @@ const rootReducer = combineReducers({
 
 const store = createStore(rootReducer, composeEnhancers(applyMiddleware(thunk, sagaMiddleware)));
 
-sagaMiddleware.run(watchAuth);
+sagaMiddleware.run(rootSaga);
 
 const app = (
     <Provider store={store}>
