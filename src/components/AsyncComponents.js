@@ -1,15 +1,31 @@
-import asyncComponent from "../hoc/asyncComponent/asyncComponent";
+import React, { Suspense } from "react";
 
-export const asyncCheckout = asyncComponent(() => {
-    return import('../containers/Checkout/Checkout');
-});
+const Checkout = React.lazy(() => import("../containers/Checkout/Checkout"));
 
-export const asyncOrders = asyncComponent(() => {
-    return import('../containers/Orders/Orders');
-});
+export function CheckoutAsync() {
+    return (
+        <Suspense fallback={<div>loading...</div>}>
+            <Checkout/>
+        </Suspense>
+    );
+}
 
-export const asyncAuth = asyncComponent(() => {
-    return import('../containers/Auth/Auth');
-});
+const Orders = React.lazy(() => import('../containers/Orders/Orders'));
 
+export function OrdersAsync() {
+    return (
+        <Suspense fallback={<div>loading...</div>}>
+            <Orders/>
+        </Suspense>
+    );
+}
 
+const Auth = React.lazy(() => import('../containers/Auth/Auth'));
+
+export function AuthAsync() {
+    return (
+        <Suspense fallback={<div>loading...</div>}>
+            <Auth/>
+        </Suspense>
+    );
+}
